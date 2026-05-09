@@ -943,6 +943,45 @@
             font-weight: bold;
             color: #333;
         }
+        /* 6カードを種別色で塗り分け */
+        .stats div.stat-card {
+            border-left: 4px solid transparent;
+            position: relative;
+        }
+        .stats div.stat-commute,
+        .stats div.stat-commute-amount {
+            background: #bbdefb;
+            border-left-color: #64b5f6;
+        }
+        .stats div.stat-commute h4,
+        .stats div.stat-commute-amount h4 {
+            color: #1565c0;
+        }
+        .stats div.stat-move,
+        .stats div.stat-transport-amount {
+            background: #ffcc80;
+            border-left-color: #ffb74d;
+        }
+        .stats div.stat-move h4,
+        .stats div.stat-transport-amount h4 {
+            color: #e65100;
+        }
+        .stats div.stat-return {
+            background: #c8e6c9;
+            border-left-color: #81c784;
+        }
+        .stats div.stat-return h4 {
+            color: #2e7d32;
+        }
+        .stats div.stat-grand-total {
+            background: linear-gradient(135deg, #1e3a5f 0%, #2a5298 100%);
+            border-left-color: #1e3a5f;
+            color: #fff;
+        }
+        .stats div.stat-grand-total h4,
+        .stats div.stat-grand-total span {
+            color: #fff;
+        }
         .error {
             color: #dc3545;
             background: #f8d7da;
@@ -1121,7 +1160,7 @@
 
             <!-- 公式ツール注記（履歴貼り付けセクションの真下、外側） -->
             <!-- 公式ツール注記（履歴貼り付けセクションの真下、外側） -->
-            <!-- version [r55] -->
+            <!-- version [r57] -->
             <div id="officialNotice" style="text-align: center; padding: 10px 12px; font-size: 12px; color: #666; line-height: 1.6;">
                 ※本ツールはPASMO協議会の公式ツールではありません。PASMOはPASMO協議会の登録商標です。
             </div>
@@ -1133,12 +1172,12 @@
                     <span id="previewNote" style="font-size: 12px; color: #888;">※必要に応じて種別変更やチェック外しを行ってください。</span>
                 </div>
                 <div class="stats">
-                    <div><h4>通勤</h4><span id="commuteCount">0</span>件</div>
-                    <div><h4>移動</h4><span id="moveCount">0</span>件</div>
-                    <div><h4>帰宅</h4><span id="returnCount">0</span>件</div>
-                    <div><h4>通勤費合計</h4><span id="commuteAmount">0</span>円</div>
-                    <div><h4>交通費合計</h4><span id="transportAmount">0</span>円</div>
-                    <div><h4>総合計</h4><span id="totalAmount">0</span>円</div>
+                    <div class="stat-card stat-commute"><h4>通勤</h4><span id="commuteCount">0</span>件</div>
+                    <div class="stat-card stat-move"><h4>移動</h4><span id="moveCount">0</span>件</div>
+                    <div class="stat-card stat-return"><h4>帰宅</h4><span id="returnCount">0</span>件</div>
+                    <div class="stat-card stat-commute-amount"><h4>通勤費合計</h4><span id="commuteAmount">0</span>円</div>
+                    <div class="stat-card stat-transport-amount"><h4>交通費合計</h4><span id="transportAmount">0</span>円</div>
+                    <div class="stat-card stat-grand-total"><h4>総合計</h4><span id="totalAmount">0</span>円</div>
                 </div>
                 <details class="user-guide-details" style="margin: 15px 0;">
                     <summary>種別変更・チェック外しについて</summary>
