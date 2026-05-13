@@ -1181,7 +1181,7 @@
 
             <!-- 公式ツール注記（履歴貼り付けセクションの真下、外側） -->
             <!-- 公式ツール注記（履歴貼り付けセクションの真下、外側） -->
-            <!-- version [r89] -->
+            <!-- version [r91] -->
             <div id="officialNotice" style="text-align: center; padding: 10px 12px; font-size: 12px; color: #666; line-height: 1.6;">
                 ※本ツールはPASMO協議会の公式ツールではありません。PASMOはPASMO協議会の登録商標です。
             </div>
@@ -2524,6 +2524,8 @@
             });
             // 👇マーク（方法A/B選択ヒント・番号順ヒント）も踊る
             document.querySelectorAll('.party-pointer').forEach(el => el.classList.add('partying-icon'));
+            // ツール内の全ての .poko-icon 絵文字アイコンも踊る
+            document.querySelectorAll('.poko-icon').forEach(el => el.classList.add('partying-icon'));
             // 念のためタイマー再設定（クリックなしでも自動終了するよう保証）
             resetInactivityResetTimer();
         }
@@ -2552,6 +2554,8 @@
             });
             // 👇マークのダンスも停止
             document.querySelectorAll('.party-pointer').forEach(el => el.classList.remove('partying-icon'));
+            // poko-icon絵文字アイコンのダンスも停止
+            document.querySelectorAll('.poko-icon').forEach(el => el.classList.remove('partying-icon'));
         }
         
         // タイトル文字を1回だけバウンスさせる（ボタンクリック時）
@@ -3619,7 +3623,7 @@
                 { key: 'small',  scale: 0.7,  icon: '⬜', label: '小' }   // 次は大になる→大きい四角
             ];
             const STORAGE_KEY = 'pasmoToolSizeMode';
-            const DEFAULT_INDEX = 1; // 初回は「中」
+            const DEFAULT_INDEX = 2; // 初回は「小」
 
             function getCurrentIndex() {
                 try {
