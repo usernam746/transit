@@ -4,7 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>交通費変換ツール</title>
-<!-- version [index_v1] -->
+<link href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&display=swap" rel="stylesheet">
+<!-- version [index_v39] -->
 <style>
   * { box-sizing: border-box; }
   body {
@@ -18,113 +19,162 @@
     align-items: center;
     justify-content: center;
     color: #fff;
-    padding: 20px;
+    padding: 12px;
   }
-  .container {
-    max-width: 900px;
-    width: 100%;
-    text-align: center;
+  .container { max-width: 900px; width: 100%; text-align: center; }
+  h1 { font-size: 28px; margin: 0 0 4px; letter-spacing: 0.02em; }
+  /* タイトル装飾: ツール内と同じ Mochiy Pop One + 立体グラデ */
+  .title-style-g {
+    font-family: 'Mochiy Pop One', sans-serif;
+    background: linear-gradient(180deg, #ffffff 0%, #ffffff 55%, #d0e4f5 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 3px 0 rgba(0,30,80,0.45)) drop-shadow(0 5px 10px rgba(0,0,0,0.35));
   }
-  h1 {
-    font-size: 32px;
-    margin: 0 0 8px;
-    font-weight: 700;
-    letter-spacing: 0.02em;
+  /* カードアイコンのホバー時くるっと回転 */
+  .card-icon {
+    transition: transform 0.6s ease;
+    display: inline-block;
   }
-  .subtitle {
-    font-size: 15px;
-    opacity: 0.85;
-    margin: 0 0 40px;
-    line-height: 1.6;
+  .card:hover .card-icon {
+    transform: rotate(360deg);
   }
-  .cards {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 24px;
-    margin-bottom: 32px;
-  }
+  .subtitle { font-size: 13px; opacity: 0.85; margin: 0 0 16px; line-height: 1.5; }
+  .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 14px; }
   @media (max-width: 600px) {
     .cards { grid-template-columns: 1fr; }
     h1 { font-size: 26px; }
   }
   .card {
-    display: block;
-    text-decoration: none;
-    background: #fff;
-    border-radius: 16px;
-    padding: 32px 24px;
-    color: #333;
+    display: block; text-decoration: none; background: #fff;
+    border-radius: 16px; padding: 18px 20px; color: #333;
     box-shadow: 0 8px 24px rgba(0,0,0,0.18);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
-    position: relative;
-    overflow: hidden;
+    position: relative; overflow: hidden;
   }
-  .card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 32px rgba(0,0,0,0.28);
-  }
-  .card-icon {
-    font-size: 48px;
-    margin-bottom: 12px;
-    display: block;
-  }
-  .card-title {
-    font-size: 22px;
-    font-weight: 700;
-    margin: 0 0 8px;
-  }
-  .card-desc {
-    font-size: 13px;
-    color: #666;
-    margin: 0 0 16px;
-    line-height: 1.6;
-    min-height: 3.2em;
-  }
-  .card-btn {
-    display: inline-block;
-    padding: 10px 24px;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 700;
-    color: #fff;
-  }
-  .card-suica .card-btn  { background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); }
+  .card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.28); }
+  .card-icon { font-size: 36px; margin-bottom: 4px; display: block; }
+  .card-title { font-size: 18px; font-weight: 700; margin: 0 0 4px; }
+  .card-desc { font-size: 12px; color: #666; margin: 0 0 10px; line-height: 1.5; }
+  .card-btn { display: inline-block; padding: 8px 20px; border-radius: 8px; font-size: 13px; font-weight: 700; color: #fff; }
+  .card-suica .card-btn  { background: linear-gradient(135deg, #00AC47 0%, #2e7d32 100%); }
   .card-pasmo .card-btn  { background: linear-gradient(135deg, #ff6b6b, #ff9800); }
-  .card-suica::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0; height: 4px;
-    background: linear-gradient(90deg, #1e3c72, #2a5298);
+  .card-suica::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #00AC47, #2e7d32); }
+  .card-pasmo::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #ff6b6b, #ff9800); }
+
+  /* 補助リンク */
+  .util-links { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin: 0 0 12px; }
+  .util-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 14px;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.25);
+    color: #fff; text-decoration: none;
+    border-radius: 8px; font-size: 13px; font-weight: 600;
+    transition: background 0.15s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
   }
-  .card-pasmo::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0; height: 4px;
-    background: linear-gradient(90deg, #ff6b6b, #ff9800);
+  .util-link:hover {
+    background: rgba(255,255,255,0.22);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.25);
   }
-  .footer {
-    font-size: 12px;
-    opacity: 0.7;
-    margin-top: 16px;
-    line-height: 1.7;
+
+  .footer { font-size: 11px; opacity: 0.7; margin-top: 10px; line-height: 1.5; }
+
+  /* ポップアップブロック通知モーダル */
+  .popup-block-modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.55);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    text-align: left;
   }
-  .footer a { color: #fff; }
+  .popup-block-modal.show { display: flex; }
+  .popup-block-modal-box {
+    background: #fff3cd;
+    border: 2px solid #ffc107;
+    border-radius: 12px;
+    padding: 20px 24px;
+    max-width: 460px;
+    width: 100%;
+    color: #5d4037;
+    line-height: 1.6;
+    box-shadow: 0 12px 36px rgba(0,0,0,0.4);
+    position: relative;
+  }
+  .popup-block-modal-box .title { margin: 0 0 12px; font-size: 16px; font-weight: bold; }
+  .popup-block-modal-box .body { margin: 0 0 14px; font-size: 13px; }
+  .popup-block-modal-box .ok-btn {
+    display: block;
+    margin: 0 auto;
+    padding: 8px 28px;
+    background: #1976d2;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+  }
+  .popup-block-modal-box .ok-btn:hover { background: #1565c0; }
+
+
+  /* モーダル */
+  .modal-overlay {
+    display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.55); z-index: 1000;
+    justify-content: center; align-items: center; padding: 20px;
+  }
+  .modal-overlay.show { display: flex; }
+  .modal-box {
+    background: white; border-radius: 12px; padding: 25px;
+    max-width: 600px; width: 100%; max-height: 90vh; overflow-y: auto;
+    color: #333; text-align: left;
+  }
+  .modal-box h2 { margin: 0 0 4px; font-size: 18px; color: #1e3c72; }
+  .modal-box .modal-sub { color: #666; font-size: 12px; margin: 0 0 16px; line-height: 1.6; }
+  .modal-section { background: #f5f7fa; padding: 15px; border-radius: 8px; margin-bottom: 16px; }
+  .modal-section h3 { margin: 0 0 10px; font-size: 14px; color: #1976d2; }
+  .modal-section .hint { color: #666; font-size: 12px; margin: 0 0 12px; }
+  .field { margin-bottom: 12px; }
+  .field:last-child { margin-bottom: 0; }
+  .field label { display: block; font-weight: bold; margin-bottom: 4px; font-size: 13px; }
+  .field input { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 6px; font-size: 13px; font-family: inherit; }
+  .modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
+  .btn-modal { border: none; border-radius: 6px; padding: 10px 20px; font-size: 14px; font-weight: bold; color: white; cursor: pointer; font-family: inherit; }
+  .btn-cancel { background: #9e9e9e; }
+  .btn-save { background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); }
+  .save-toast {
+    position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+    background: #2e7d32; color: white; padding: 12px 24px;
+    border-radius: 8px; font-size: 14px; font-weight: bold;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.25s ease; z-index: 2000;
+  }
+  .save-toast.show { opacity: 1; }
 </style>
 </head>
 <body>
   <div class="container">
-    <h1>🚃 交通費変換ツール</h1>
+    <h1>🚃 <span class="title-style-g">交通費変換ツール</span></h1>
     <p class="subtitle">モバイルSuica / PASMO の利用履歴を、<br>会社申請フォーマットに自動変換します。</p>
 
     <div class="cards">
-      <a href="suica.html" class="card card-suica">
+      <a href="./suica.html" class="card card-suica">
         <span class="card-icon">🍉</span>
         <div class="card-title">SUICA版</div>
         <p class="card-desc">モバイルSuicaのSF残額履歴を変換。<br>JR東日本 会員メニューサイトから取得したPDF / コピペに対応。</p>
         <span class="card-btn">SUICA版を開く →</span>
       </a>
 
-      <a href="pasmo.html" class="card card-pasmo">
+      <a href="./pasmo.html" class="card card-pasmo">
         <span class="card-icon">🚃</span>
         <div class="card-title">PASMO版</div>
         <p class="card-desc">モバイルPASMOの利用履歴を変換。<br>PASMO公式サイトから取得したPDF / コピペに対応。</p>
@@ -132,9 +182,233 @@
       </a>
     </div>
 
+    <div class="util-links">
+      <a href="#" class="util-link" onclick="event.preventDefault(); openSettings();">⚙️ 初期設定</a>
+      <a href="#" class="util-link" onclick="event.preventDefault(); openFreeeOnRight();">📋 freee人事労務</a>
+    </div>
+
+
+
+    <div id="popupBlockedNoticeMain" class="popup-block-modal">
+      <div class="popup-block-modal-box">
+        <p class="title">⚠️ ポップアップがブロックされました</p>
+        <p class="body">
+          アドレスバー右側に表示される <strong>ポップアップブロック通知</strong>（小さなウィンドウに斜線が入ったアイコン）をクリックして、<strong>「このサイトのポップアップとリダイレクトを常に許可する」</strong> を選択し、もう一度ボタンを押してください。
+        </p>
+        <button type="button" class="ok-btn" onclick="closePopupBlockNotice()">OK</button>
+      </div>
+    </div>
+
     <p class="footer">
-      ※ データは全てブラウザ内（localStorage）で処理されます。サーバーへの送信は一切ありません。<br>
+      ※ 初期設定を保存すると、SSのリンクが設定されて申請内容がフォームに自動入力されます。<br>
+      ※ 初期設定はSuica版・PASMO版で共通の設定として保存されます。
     </p>
   </div>
+
+  <!-- 初期設定モーダル -->
+  <div id="settingsOverlay" class="modal-overlay" onclick="onOverlayClick(event)">
+    <div class="modal-box">
+      <h2>🔧 初期設定</h2>
+      <p class="modal-sub">初期設定を保存すると、申請内容がフォームに自動入力されます。<br>設定内容はお使いのブラウザに保存されますので、他のPCからは閲覧できません。</p>
+
+      <div id="freeeFallback" style="display:none; background: #fff3cd; border: 1px solid #ffe082; border-radius: 6px; padding: 10px 12px; margin-bottom: 16px; font-size: 12px; color: #5d4037;">
+        ⚠️ ポップアップブロックのため freee画面が自動で開けませんでした。<br>
+        <a href="#" onclick="event.preventDefault(); openFreeeOnRight();" style="color: #1976d2; text-decoration: underline; font-weight: bold; cursor: pointer;">こちらをクリックしてfreee人事労務を開いてください</a>
+      </div>
+
+      <div class="modal-section">
+        <h3>👤 申請者登録（申請用フォーム自動入力用）</h3>
+        <div class="field">
+          <label>従業員番号</label>
+          <input type="text" id="empIdInput" placeholder="例：123456">
+        </div>
+        <div class="field">
+          <label>氏名</label>
+          <input type="text" id="empNameInput" placeholder="例：研修 太郎">
+        </div>
+        <div class="field">
+          <label>メールアドレス（会社）</label>
+          <input type="text" id="empEmailInput" placeholder="例：taro-kenshu@company.co.jp">
+        </div>
+      </div>
+
+      <div class="modal-section">
+        <h3>🔗 URL登録</h3>
+        <p class="hint"><a href="#" onclick="event.preventDefault(); openFreeeOnRight();" style="color: #1976d2; text-decoration: underline; font-weight: bold; cursor: pointer;">freeeログイン</a> → 従業員情報ページ → 通勤交通費申請 → 各URLをコピペ</p>
+        <div class="field">
+          <label>①📊 申請用SS</label>
+          <input type="text" id="urlInput1" placeholder="https://...">
+        </div>
+        <div class="field">
+          <label>②📝 申請用フォーム</label>
+          <input type="text" id="urlInput2" placeholder="https://...">
+        </div>
+        <div class="field">
+          <label>③✅ 承認状況確認</label>
+          <input type="text" id="urlInput3" placeholder="https://...">
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn-modal btn-cancel" onclick="closeSettings()">キャンセル</button>
+        <button class="btn-modal btn-save" onclick="saveSettings()">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="saveToast" class="save-toast">✓ 初期設定を保存しました</div>
+
+  <script>
+    // localStorageキーはSuica/PASMOツール側と完全一致
+    const KEYS = {
+      url1: 'transportation_expense_url1',
+      url2: 'transportation_expense_url2',
+      url3: 'transportation_expense_url3',
+      empId: 'transportation_expense_emp_id',
+      empName: 'transportation_expense_emp_name',
+      empEmail: 'transportation_expense_emp_email'
+    };
+
+    let freeeWindow = null;
+    let settingsWindow = null;
+
+    // URLパラメータ ?settings=1 でアクセスされた場合は、設定モーダル専用画面として表示
+    function isSettingsMode() {
+      return new URLSearchParams(location.search).has('settings');
+    }
+
+    // ウィンドウ配置定数（設定3:freee7、間に10px隙間）
+    function getWindowLayout() {
+      const sw = screen.availWidth;
+      const sh = screen.availHeight;
+      const gap = 40;
+      const settingsW = Math.floor(sw * 0.3);
+      const freeeW    = sw - settingsW - gap;
+      return {
+        settings: { width: settingsW, height: sh, left: 0,                top: 0 },
+        freee:    { width: freeeW,    height: sh, left: settingsW + gap, top: 0 }
+      };
+    }
+
+    function openSettings() {
+      // 既に設定ウィンドウが開いていれば前面に出すだけ
+      if (settingsWindow && !settingsWindow.closed) {
+        try { settingsWindow.focus(); } catch (e) {}
+        return;
+      }
+      const layout = getWindowLayout();
+
+      // ユーザークリックの同期内で2つとも開く（ノートPCのポップアップブロッカー対策）
+      // freeeを先に開く（2つ目のwindow.openがブロックされやすい）
+      const fL = layout.freee;
+      const fFeatures = `width=${fL.width},height=${fL.height},left=${fL.left},top=${fL.top},resizable=yes,scrollbars=yes`;
+      freeeWindow = window.open('https://accounts.secure.freee.co.jp/login/hr', 'freeeHR', fFeatures);
+
+      // 設定ウィンドウ
+      const sL = layout.settings;
+      const sFeatures = `width=${sL.width},height=${sL.height},left=${sL.left},top=${sL.top},resizable=yes,scrollbars=yes`;
+      settingsWindow = window.open('?settings=1', 'transitSettings', sFeatures);
+
+      // ポップアップブロック判定（settings/freeeどちらか開けなかった場合）
+      const blocked = (!settingsWindow || settingsWindow.closed) || (!freeeWindow || freeeWindow.closed);
+      if (blocked) {
+        // 開いた窓は閉じて、TOPウィンドウだけ残してモーダルを必ず見える状態に
+        try { if (settingsWindow && !settingsWindow.closed) settingsWindow.close(); } catch(e) {}
+        try { if (freeeWindow && !freeeWindow.closed) freeeWindow.close(); } catch(e) {}
+        settingsWindow = null; freeeWindow = null;
+        document.getElementById('popupBlockedNoticeMain').classList.add('show');
+      }
+    }
+    function closePopupBlockNotice() {
+      document.getElementById('popupBlockedNoticeMain').classList.remove('show');
+    }
+
+    function openFreeeOnRight() {
+      if (freeeWindow && !freeeWindow.closed) {
+        try { freeeWindow.focus(); return; } catch (e) {}
+      }
+      const L = getWindowLayout().freee;
+      const features = `width=${L.width},height=${L.height},left=${L.left},top=${L.top},resizable=yes,scrollbars=yes`;
+      freeeWindow = window.open('https://accounts.secure.freee.co.jp/login/hr', 'freeeHR', features);
+      // ブロックされたらモーダル表示(freeeしか開けてないので閉じるものはなし)
+      const blocked = !freeeWindow || freeeWindow.closed;
+      if (blocked) {
+        document.getElementById('popupBlockedNoticeMain').classList.add('show');
+      }
+    }
+
+    // 設定モーダルを開く処理（settings=1モードで自動的に呼ばれる）
+    function openSettingsModalInPlace() {
+      document.getElementById('urlInput1').value    = localStorage.getItem(KEYS.url1) || '';
+      document.getElementById('urlInput2').value    = localStorage.getItem(KEYS.url2) || '';
+      document.getElementById('urlInput3').value    = localStorage.getItem(KEYS.url3) || '';
+      document.getElementById('empIdInput').value   = localStorage.getItem(KEYS.empId) || '';
+      document.getElementById('empNameInput').value = localStorage.getItem(KEYS.empName) || '';
+      document.getElementById('empEmailInput').value = localStorage.getItem(KEYS.empEmail) || '';
+      document.getElementById('settingsOverlay').classList.add('show');
+    }
+
+    function closeSettings() {
+      document.getElementById('settingsOverlay').classList.remove('show');
+      // 別ウィンドウとして開かれている場合は自身を閉じる
+      if (isSettingsMode()) {
+        try { window.close(); } catch (e) {}
+      }
+    }
+
+    // 背景クリックで閉じる判定（別ウィンドウとして開かれている場合は閉じない）
+    function onOverlayClick(e) {
+      if (e.target !== e.currentTarget) return;
+      if (isSettingsMode()) return;
+      closeSettings();
+    }
+
+    function saveSettings() {
+      const map = {
+        url1:    document.getElementById('urlInput1').value.trim(),
+        url2:    document.getElementById('urlInput2').value.trim(),
+        url3:    document.getElementById('urlInput3').value.trim(),
+        empId:   document.getElementById('empIdInput').value.trim(),
+        empName: document.getElementById('empNameInput').value.trim(),
+        empEmail: document.getElementById('empEmailInput').value.trim()
+      };
+      for (const k in map) {
+        if (map[k]) {
+          localStorage.setItem(KEYS[k], map[k]);
+        } else {
+          localStorage.removeItem(KEYS[k]);
+        }
+      }
+      const toast = document.getElementById('saveToast');
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+        // 別ウィンドウとして開かれている場合は保存後に自身を閉じる
+        if (isSettingsMode()) {
+          try { window.close(); } catch (e) {}
+        } else {
+          closeSettings();
+        }
+      }, 1200);
+    }
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeSettings();
+    });
+
+    // settingsモード時の初期化処理
+    window.addEventListener('DOMContentLoaded', () => {
+      if (isSettingsMode()) {
+        // メインのカード等を非表示にして、モーダルだけ見せる
+        const cont = document.querySelector('.container');
+        if (cont) cont.style.display = 'none';
+        document.body.style.background = 'rgba(0,0,0,0.6)';
+        openSettingsModalInPlace();
+
+        // freee は親ウィンドウ側で同期に開かれている。ここでは何もしない。
+        // フォールバック表示も親で完結しているので不要。
+      }
+    });
+  </script>
 </body>
 </html>

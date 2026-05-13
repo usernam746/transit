@@ -272,30 +272,46 @@
             animation: process-btn-pulse 1.4s ease-in-out infinite;
         }
         /* プレビュー注記のマーカー風ハイライト：左→右に黄色いマーカーが塗られて、保持後、右側へ吸い込まれて消える。4回繰り返し */
+        /* note-blink: ココをクリック風の赤い吹き出し。5回点滅後、常時表示で固定 */
         .note-blink {
-            display: inline-block;
-            padding: 1px 5px;
-            border-radius: 3px;
-            animation: note-flash 1.5s ease-out 10;
+            display: inline-block !important;
+            background: #ff5252 !important;
+            color: white !important;
+            padding: 6px 14px !important;
+            border-radius: 8px !important;
+            font-size: 13px !important;
+            font-weight: bold !important;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3) !important;
+            animation: note-attention-blink 0.7s ease-in-out 5;
+            animation-fill-mode: forwards;
         }
-        @keyframes note-flash {
-            0%   { background: transparent; box-shadow: none; color: #888; }
-            10%  { background: #86efac; box-shadow: 0 0 14px 4px rgba(34,197,94,0.9); color: #14532d; }
-            40%  { background: #bbf7d0; box-shadow: 0 0 8px 2px rgba(34,197,94,0.5); color: #14532d; }
-            100% { background: transparent; box-shadow: none; color: #888; }
+        @keyframes note-attention-blink {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50%      { opacity: 0.35; transform: scale(0.95); }
         }
-        /* note-blink連動：✓と種別の見出しが同期して黄色く光る */
-        .th-flash-checkbox {
-            animation: th-flash-sync 1.5s ease-out 10;
+        /* note-blink連動：✓と種別の見出しが赤枠で5回点滅後、常時赤枠＋上に👇アイコン */
+        .th-flash-checkbox, .th-flash-category {
+            position: relative;
+            text-align: center !important;
+            padding-top: 26px !important;
+            animation: th-frame-attention-blink 0.7s ease-in-out 5;
+            animation-fill-mode: forwards;
         }
-        .th-flash-category {
-            animation: th-flash-sync 1.5s ease-out 10;
+        .th-flash-checkbox::before, .th-flash-category::before {
+            content: '👇';
+            position: absolute;
+            top: -16px;
+            transform: translateX(-50%);
+            font-size: 18px;
+            line-height: 1;
+            animation: pyokopyoko 0.9s ease-in-out infinite;
+            pointer-events: none;
         }
-        @keyframes th-flash-sync {
-            0%   { background: transparent; box-shadow: none; color: inherit; }
-            10%  { background: #86efac; box-shadow: 0 0 14px 4px rgba(34,197,94,0.9); color: #14532d; }
-            40%  { background: #bbf7d0; box-shadow: 0 0 8px 2px rgba(34,197,94,0.5); color: #14532d; }
-            100% { background: transparent; box-shadow: none; color: inherit; }
+        .th-flash-checkbox::before { left: 22%; }
+        .th-flash-category::before { left: 38%; }
+        @keyframes th-frame-attention-blink {
+            0%, 100% { box-shadow: inset 0 0 0 3px #ff5252; background: rgba(255, 82, 82, 0.15); }
+            50%      { box-shadow: inset 0 0 0 3px transparent; background: transparent; }
         }
         @keyframes th-flash-checkbox {
             /* ✓: マーカー塗り始めと同期で光り、塗り終わりからは保持、終盤で消える */
@@ -332,6 +348,10 @@
         .btn-spreadsheet {
             background: linear-gradient(135deg, #1976d2, #64b5f6);
         }
+        /* 各種申請ボタン: 変換プレビューカードと同じ色味（薄背景+濃文字） */
+        .btn-apply-ss     { background: #bbdefb; color: #1565c0; }
+        .btn-apply-form   { background: #ffcc80; color: #e65100; }
+        .btn-apply-status { background: #c8e6c9; color: #2e7d32; }
         .preview-table {
             width: 100%;
             border-collapse: collapse;
@@ -1041,8 +1061,8 @@
                             </div>
                             <ol style="margin: 8px 0 0 0; padding-left: 22px; font-size: 14px; color: #555; line-height: 1.8;">
                                 <li><a href="https://www.mobilesuica.com/" target="_blank" rel="noopener" style="color: #1976d2; text-decoration: underline; font-weight: bold;" onmouseover="this.style.color='#0d47a1'" onmouseout="this.style.color='#1976d2'">モバイルSUICA会員メニューサイトを開く</a></li>
-                                <li><span onclick="openSfGuide()" style="cursor: pointer; color: #1976d2; text-decoration: underline; font-weight: bold;" onmouseover="this.style.color='#0d47a1'" onmouseout="this.style.color='#1976d2'" title="クリックでガイドを表示">「SF残額履歴」をクリック</span></li>
-                                <li><span onclick="event.preventDefault(); togglePrintExample();" style="cursor: pointer; color: #1976d2; font-weight: bold; text-decoration: underline; user-select: none;" onmouseover="this.style.color='#0d47a1'" onmouseout="this.style.color='#1976d2'">「表示された履歴を印刷」</span>を押してPDF保存</li>
+                                <li><span onclick="openSfGuide()" style="cursor: pointer; display: inline-block; padding: 1px 8px; background: #f0f4f8; color: #555; border: 1px solid #c5d3df; border-radius: 4px; font-weight: 600;" onmouseover="this.style.background='#dde6ee'" onmouseout="this.style.background='#f0f4f8'" title="クリックでガイドを表示">SF残額履歴</span> をクリック</li>
+                                <li><span onclick="event.preventDefault(); togglePrintExample();" style="cursor: pointer; display: inline-block; padding: 1px 8px; background: #f0f4f8; color: #555; border: 1px solid #c5d3df; border-radius: 4px; font-weight: 600; user-select: none;" onmouseover="this.style.background='#dde6ee'" onmouseout="this.style.background='#f0f4f8'">表示された履歴を印刷</span> を押してPDF保存</li>
                                 <li>
                                     <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
                                         対象年月を選択：
@@ -1069,7 +1089,7 @@
                             </div>
                             <ol style="margin: 8px 0 0 0; padding-left: 22px; font-size: 14px; color: #555; line-height: 1.8;">
                                 <li><a href="https://www.mobilesuica.com/" target="_blank" rel="noopener" style="color: #1976d2; text-decoration: underline; font-weight: bold;" onmouseover="this.style.color='#0d47a1'" onmouseout="this.style.color='#1976d2'">モバイルSUICA会員メニューサイトを開く</a></li>
-                                <li><span onclick="openSfGuide()" style="cursor: pointer; color: #1976d2; text-decoration: underline; font-weight: bold;" onmouseover="this.style.color='#0d47a1'" onmouseout="this.style.color='#1976d2'" title="クリックでガイドを表示">「SF残額履歴」をクリック</span></li>
+                                <li><span onclick="openSfGuide()" style="cursor: pointer; display: inline-block; padding: 1px 8px; background: #f0f4f8; color: #555; border: 1px solid #c5d3df; border-radius: 4px; font-weight: 600;" onmouseover="this.style.background='#dde6ee'" onmouseout="this.style.background='#f0f4f8'" title="クリックでガイドを表示">SF残額履歴</span> をクリック</li>
                                 <li>表の必要な部分をコピー（<span onclick="event.preventDefault(); toggleCopyExample();" style="cursor: pointer; color: #ffb74d; font-weight: bold; text-decoration: underline; user-select: none;" onmouseover="this.style.color='#ff9800'" onmouseout="this.style.color='#ffb74d'"><span class="poko-icon" id="iconCopyHint">💡</span>コピー方法を見る</span>）</li>
                                 <li>Ctrl+Vで下の枠に貼り付け</li>
                             </ol>
@@ -1159,17 +1179,14 @@
             </div>
 
             <!-- 公式ツール注記（履歴貼り付けセクションの真下、外側） -->
-            <!-- version [s70] -->
+            <!-- version [s102] -->
             <div id="officialNotice" style="text-align: center; padding: 10px 12px; font-size: 12px; color: #666; line-height: 1.6;">
                 ※本ツールはJR東日本協議会の公式ツールではありません。SuicaはJR東日本協議会の登録商標です。
             </div>
 
             <!-- プレビューセクション -->
             <div id="previewSection" class="section hidden">
-                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
-                    <h3 style="margin: 0;"><span id="iconPreview" style="display: inline-block;">👀</span> 変換結果プレビュー</h3>
-                    <span id="previewNote" style="font-size: 12px; color: #888;">※必要に応じて種別変更やチェック外しを行ってください。</span>
-                </div>
+                <h3 style="margin: 0;"><span id="iconPreview" style="display: inline-block;">👀</span> 変換結果プレビュー</h3>
                 <div class="stats">
                     <div class="stat-card stat-commute"><h4>通勤</h4><span id="commuteCount">0</span>件</div>
                     <div class="stat-card stat-move"><h4>移動</h4><span id="moveCount">0</span>件</div>
@@ -1186,6 +1203,9 @@
                         ・ 寄り道などの理由で通常経路より運賃が高くなった場合は、SSに貼り付け後に手作業で修正をお願いします。
                     </div>
                 </details>
+                <div style="text-align: left; padding-left: 22%; margin: 12px 0 -4px;">
+                    <span id="previewNote" style="font-size: 12px; color: #888;">※必要に応じて種別変更やチェック外しを行ってください。</span>
+                </div>
                 <div style="overflow-x: auto;">
                     <table class="preview-table">
                         <thead>
@@ -1244,12 +1264,12 @@
                     </span>
                 </div>
                 <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                    <button type="button" id="applySSButton" class="btn btn-spreadsheet" onclick="deactivateApplyAttention(); openRegisteredUrl('url1')" data-bounce="iconApply">①📊 申請用SS</button>
-                    <button type="button" class="btn btn-spreadsheet" onclick="openFormWithPrefill()" data-bounce="iconApply">②📝 申請用フォーム</button>
-                    <button type="button" class="btn btn-spreadsheet" onclick="openRegisteredUrl('url3')" data-bounce="iconApply">③✅ 承認状況確認</button>
+                    <button type="button" id="applySSButton" class="btn btn-apply-ss" onclick="deactivateApplyAttention(); openRegisteredUrl('url1')" data-bounce="iconApply">①📊 申請用SS</button>
+                    <button type="button" class="btn btn-apply-form" onclick="openFormWithPrefill()" data-bounce="iconApply">②📝 申請用フォーム</button>
+                    <button type="button" class="btn btn-apply-status" onclick="openRegisteredUrl('url3')" data-bounce="iconApply">③✅ 承認状況確認</button>
                 </div>
                 <div style="color: #666; font-size: 13px; margin-top: 10px;">
-                    ※各初回のみ初期設定が必要です。<a href="#" onclick="event.preventDefault(); openUrlEditor();" data-bounce="iconApply" style="color: #1976d2; text-decoration: underline; font-weight: bold;">初期設定</a>から申請者情報と各URLを登録してください。（URLは<a href="https://accounts.secure.freee.co.jp/login/hr" target="_blank" data-bounce="iconApply" style="color: #1976d2; text-decoration: underline; font-weight: bold;">freee人事労務</a>→従業員情報ページ→通勤交通費 から取得）<br>
+                    ※各初回のみ初期設定が必要です。<a href="#" onclick="event.preventDefault(); openUrlEditor();" data-bounce="iconApply" style="color: #1976d2; text-decoration: underline; font-weight: bold;">初期設定</a>から申請者情報と各URLを登録してください。（URLは<a href="#" onclick="event.preventDefault(); openFreeeRightWindow();" data-bounce="iconApply" style="color: #1976d2; text-decoration: underline; font-weight: bold;">freee人事労務</a>→従業員情報ページ→通勤交通費 から取得）<br>
                     ※初期設定を行うと、<span style="color: #dc3545; font-weight: bold;">②申請用フォーム欄の入力も自動で行われます。</span>ボタンを押したら「続行」をクリックしてください。<br>
                     ※登録情報は現在お使いのブラウザ内にのみ保存されます。PCやブラウザを変更した場合は、再度登録が必要になります。
                 </div>
@@ -1439,18 +1459,65 @@
             window.open(url, '_blank');
         }
 
+        // freee人事労務を右側70%幅の別ウィンドウで開く
+        function openFreeeRightWindow() {
+            const sw = screen.availWidth;
+            const sh = screen.availHeight;
+            const gap = 20;
+            const settingsW = Math.floor(sw * 0.3);
+            const freeeW = sw - settingsW - gap;
+            const left = settingsW + gap;
+            window.open('https://accounts.secure.freee.co.jp/login/hr', 'freeeHR',
+                `width=${freeeW},height=${sh},left=${left},top=0,resizable=yes,scrollbars=yes`);
+        }
+        // 初期設定: 自身を ?settings=1 で別ウィンドウ(左30%)に開く + freeeを右70%で開く
+        // ユーザークリックの同期内で2つとも開く（ノートPCのポップアップブロッカー対策）
         function openUrlEditor() {
-            document.getElementById('urlInput1').value = localStorage.getItem(URL_STORAGE_KEYS.url1) || '';
-            document.getElementById('urlInput2').value = localStorage.getItem(URL_STORAGE_KEYS.url2) || '';
-            document.getElementById('urlInput3').value = localStorage.getItem(URL_STORAGE_KEYS.url3) || '';
-            document.getElementById('empIdInput').value = localStorage.getItem(EMP_ID_KEY) || '';
+            const sw = screen.availWidth;
+            const sh = screen.availHeight;
+            const gap = 40;
+            const settingsW = Math.floor(sw * 0.3);
+            const freeeW = sw - settingsW - gap;
+
+            // freeeを先に開く
+            window.open('https://accounts.secure.freee.co.jp/login/hr', 'freeeHR',
+                `width=${freeeW},height=${sh},left=${settingsW + gap},top=0,resizable=yes,scrollbars=yes`);
+
+            // 設定ウィンドウ(自身)を開く
+            const url = location.href.split('?')[0].split('#')[0] + '?settings=1';
+            const settingsWin = window.open(url, 'transitSettings',
+                `width=${settingsW},height=${sh},left=0,top=0,resizable=yes,scrollbars=yes`);
+            if (!settingsWin || settingsWin.closed) {
+                alert('ポップアップがブロックされたため設定画面を開けませんでした。\nブラウザのアドレスバー右側から「ポップアップを許可」してください。');
+            }
+        }
+        // ?settings=1モード時の初期化: ツール本体を隠して設定モーダルだけ表示 + freeeを右に開く
+        function initSettingsModeIfNeeded() {
+            if (!new URLSearchParams(location.search).has('settings')) return;
+            // ツール本体UIを非表示
+            document.body.style.background = 'rgba(0,0,0,0.6)';
+            for (const el of document.body.children) {
+                if (el.id !== 'urlEditorOverlay') el.style.display = 'none';
+            }
+            // 設定モーダルを表示(既存のopenUrlEditorは別ウィンドウを開くため、ここでは直接表示)
+            document.getElementById('urlInput1').value   = localStorage.getItem(URL_STORAGE_KEYS.url1) || '';
+            document.getElementById('urlInput2').value   = localStorage.getItem(URL_STORAGE_KEYS.url2) || '';
+            document.getElementById('urlInput3').value   = localStorage.getItem(URL_STORAGE_KEYS.url3) || '';
+            document.getElementById('empIdInput').value  = localStorage.getItem(EMP_ID_KEY) || '';
             document.getElementById('empNameInput').value = localStorage.getItem(EMP_NAME_KEY) || '';
             document.getElementById('empEmailInput').value = localStorage.getItem(EMP_EMAIL_KEY) || '';
             document.getElementById('urlEditorOverlay').style.display = 'flex';
+            // freeeは親ウィンドウ側で同期に開かれている
         }
+        // 起動時に判定実行
+        window.addEventListener('DOMContentLoaded', initSettingsModeIfNeeded);
 
         function closeUrlEditor() {
             document.getElementById('urlEditorOverlay').style.display = 'none';
+            // ?settings=1モード(別ウィンドウとして開かれた場合)は自身を閉じる
+            if (new URLSearchParams(location.search).has('settings')) {
+                try { window.close(); } catch(e) {}
+            }
         }
 
         function saveUrls() {
@@ -1473,8 +1540,13 @@
             if (empId) localStorage.setItem(EMP_ID_KEY, empId); else localStorage.removeItem(EMP_ID_KEY);
             if (empName) localStorage.setItem(EMP_NAME_KEY, empName); else localStorage.removeItem(EMP_NAME_KEY);
             if (empEmail) localStorage.setItem(EMP_EMAIL_KEY, empEmail); else localStorage.removeItem(EMP_EMAIL_KEY);
-            closeUrlEditor();
             showSuccess('初期設定を保存しました');
+            // ?settings=1モード(別ウィンドウ)時は1.2秒後にウィンドウを閉じる、それ以外はモーダルだけ閉じる
+            if (new URLSearchParams(location.search).has('settings')) {
+                setTimeout(() => { try { window.close(); } catch(e) {} }, 1200);
+            } else {
+                closeUrlEditor();
+            }
         }
 
         function openFormWithPrefill() {
@@ -2220,6 +2292,12 @@
             const btn = document.getElementById('processButton');
             if (hint) hint.style.display = 'block';
             if (btn) btn.classList.add('pulse-attention');
+            // 「いずれかを選択」「番号順に作業」のヒントを消す
+            const methodBalloon = document.getElementById('methodHintBalloon');
+            if (methodBalloon) methodBalloon.style.display = 'none';
+            document.querySelectorAll('.order-hint-balloon').forEach(el => {
+                el.style.display = 'none';
+            });
         }
         function deactivateProcessAttention() {
             const hint = document.getElementById('processNextHint');
