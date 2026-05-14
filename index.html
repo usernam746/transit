@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>交通費変換ツール</title>
 <link href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&display=swap" rel="stylesheet">
-<!-- version [index_v39] -->
+<!-- version [index_v38] -->
 <style>
   * { box-sizing: border-box; }
   body {
@@ -167,14 +167,14 @@
     <p class="subtitle">モバイルSuica / PASMO の利用履歴を、<br>会社申請フォーマットに自動変換します。</p>
 
     <div class="cards">
-      <a href="./suica.html" class="card card-suica">
+      <a href="suica.html" class="card card-suica" onclick="console.log('開くURL:', this.href);">
         <span class="card-icon">🍉</span>
         <div class="card-title">SUICA版</div>
         <p class="card-desc">モバイルSuicaのSF残額履歴を変換。<br>JR東日本 会員メニューサイトから取得したPDF / コピペに対応。</p>
         <span class="card-btn">SUICA版を開く →</span>
       </a>
 
-      <a href="./pasmo.html" class="card card-pasmo">
+      <a href="pasmo.html" class="card card-pasmo" onclick="console.log('開くURL:', this.href);">
         <span class="card-icon">🚃</span>
         <div class="card-title">PASMO版</div>
         <p class="card-desc">モバイルPASMOの利用履歴を変換。<br>PASMO公式サイトから取得したPDF / コピペに対応。</p>

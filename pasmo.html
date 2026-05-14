@@ -470,26 +470,35 @@
             background: #fafafa;
         }
         .user-guide-content {
-            padding: 14px 18px 16px;
-            font-size: 15px;
+            padding: 10px 14px 12px;
+            font-size: 12px;
             color: #555;
-            line-height: 1.65;
+            line-height: 1.6;
         }
         .user-guide-content h4 {
-            margin: 14px 0 4px;
-            font-size: 15px;
+            margin: 12px 0 3px;
+            font-size: 13px;
             color: #333;
+            font-weight: bold;
+        }
+        .user-guide-content h4::before {
+            content: '◎ ';
+            color: #ff6b6b;
             font-weight: bold;
         }
         .user-guide-content h4:first-child {
             margin-top: 0;
         }
         .user-guide-content p {
-            margin: 0 0 8px;
+            margin: 0 0 6px;
         }
         .user-guide-content small {
             color: #888;
-            font-size: 13px;
+            font-size: 11px;
+        }
+        .user-guide-content ul, .user-guide-content ol {
+            margin: 0 0 6px;
+            padding-left: 20px;
         }
         /* 電車パーティーモード（最大増殖時に発動） */
         @keyframes party-bounce {
@@ -1052,7 +1061,7 @@
                     </div>
                     <div id="methodSelectionGroup" style="margin-bottom: 8px; display: flex; gap: 8px; flex-wrap: wrap; align-items: stretch;">
                         <!-- 方法A：PDFから読み込み（折りたたみ、デフォルト閉じ）-->
-                        <details style="flex: 1; min-width: 280px; padding: 8px 14px; background: #f7f7f7; border-radius: 8px; border-left: 3px solid #1976d2;" data-order-hint="A">
+                        <details id="methodA" style="flex: 1; min-width: 280px; padding: 8px 14px; background: #f7f7f7; border-radius: 8px; border-left: 3px solid #1976d2;" data-order-hint="A">
                             <summary style="font-size: 15px; font-weight: bold; color: #1976d2; cursor: pointer; list-style: none; user-select: none;"><span class="poko-icon" id="iconMethodA">📄</span> 方法A：PDFから読み込み <span style="font-size: 12px; color: #888; font-weight: normal;">※月一括でデータ取り込み ▼</span></summary>
                             <div class="order-hint-balloon" style="display: none; margin: 8px 0 4px 0;">
                                 <div class="pyokopyoko" style="display: inline-block; background: #ff5252; color: white; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: bold; box-shadow: 0 3px 8px rgba(0,0,0,0.25); position: relative;">
@@ -1097,36 +1106,7 @@
                             <div style="font-size: 12px; color: #888; font-weight: normal; margin-top: 8px; padding-left: 22px;"><span onclick="event.preventDefault(); toggleUserGuide();" style="cursor: pointer; color: #888; text-decoration: underline; user-select: none;" onmouseover="this.style.color='#555'" onmouseout="this.style.color='#888'">※詳しい使い方を見る</span></div>
                         </details>
                     </div>
-                    <div id="userGuideModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; justify-content: center; align-items: center; padding: 20px;" onclick="if(event.target===this)toggleUserGuide();">
-                        <div style="background: white; border-radius: 12px; padding: 20px 24px; width: 720px; max-width: 100%; max-height: 90vh; overflow-y: auto; position: relative; box-sizing: border-box;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                                <h3 style="margin: 0; color: #ff6b6b; font-size: 16px;">📋 表をコピーして貼り付け（方法B）の詳しい使い方</h3>
-                                <button type="button" onclick="toggleUserGuide()" style="background: none; border: none; font-size: 26px; cursor: pointer; color: #666; padding: 0 6px; line-height: 1;">×</button>
-                            </div>
-                            <div class="user-guide-content">
-                                <h4>入力内容は自動で保存されます</h4>
-                                <p>貼り付けた履歴はブラウザに自動保存されるので、ページを閉じても次回開いた時に残っています。<br>
-                                <small>※同じPCの同じブラウザに限ります。別のPCに変えたり、ブラウザ履歴を全削除すると消えます。</small></p>
-
-                                <h4>別日の履歴を追加するには</h4>
-                                <p>PASMOから新しい履歴をコピーした後、<strong style="color:#64b5f6;">入力欄の一番上の空行</strong>にカーソルを置いて Ctrl+V で貼り付けてください。古い履歴は下に押し下げられます。</p>
-
-                                <h4>入力欄が自動で整理されます</h4>
-                                <p>解析ボタンを押すと、入力欄の中身が <strong style="color:#ff9800;">日付の新しい順</strong> に自動で並び替わって、<strong>「↓ここから下は解析済み↓」</strong> という区切り線の下にまとめられます。<br>
-                                次に新しい履歴を追加する時は、上の空行に貼り付ければOKです。</p>
-
-                                <h4>同じ履歴は二重に登録されません</h4>
-                                <p>うっかり同じ履歴を2回貼り付けても大丈夫です。<strong>日付・乗車駅・降車駅・金額</strong>が全て同じものは「同じトリップ」と判定して自動でスキップします。<br>
-                                過去の履歴と新しい履歴に重複があっても、新規分だけが追加されます。</p>
-
-                                <h4>「NEW」バッジについて</h4>
-                                <p>プレビュー表で <span class="new-badge">NEW</span> バッジ と <span style="background:#f0fdf4; padding:1px 6px; border:1px solid #ddd; border-radius:3px;">薄い緑背景</span> が付いている行は、最後の解析で新しく追加された分です。次の解析まで残るので、ゆっくり種別変更やチェック確認ができます。</p>
-
-                                <h4>リセットボタンの動作</h4>
-                                <p>🗑️ リセットを押すと、<strong>入力欄・プレビュー・累計データ全て</strong>が消去されます。一発で消えるので、間違って押さないよう注意してください。</p>
-                            </div>
-                        </div>
-                    </div>
+                    
                     <div id="copyExampleBox" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; justify-content: center; align-items: center; padding: 20px;" onclick="if(event.target===this)toggleCopyExample();">
                         <div style="background: white; border-radius: 12px; padding: 20px; width: 720px; max-width: 100%; max-height: 90vh; overflow-y: auto; position: relative; box-sizing: border-box;">
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
@@ -1181,7 +1161,7 @@
 
             <!-- 公式ツール注記（履歴貼り付けセクションの真下、外側） -->
             <!-- 公式ツール注記（履歴貼り付けセクションの真下、外側） -->
-            <!-- version [r91] -->
+            <!-- version [r104] -->
             <div id="officialNotice" style="text-align: center; padding: 10px 12px; font-size: 12px; color: #666; line-height: 1.6;">
                 ※本ツールはPASMO協議会の公式ツールではありません。PASMOはPASMO協議会の登録商標です。
             </div>
@@ -1258,7 +1238,7 @@
 
             <!-- 貼り付け用セクション -->
             <div id="pasteSection" class="section hidden">
-                <h3><span id="iconApply" style="display: inline-block;">📊</span> 各種申請 <span style="font-size: 13px; color: #888; font-weight: normal; vertical-align: middle;">（※初期設定が必要です）</span></h3>
+                <h3><span id="iconApply" style="display: inline-block;">📊</span> 各種申請 <span style="font-size: 13px; color: #888; font-weight: normal; vertical-align: middle;">（※各SSへのリンクは<a href="#" onclick="event.preventDefault(); openUrlEditor();" style="color: #1976d2; text-decoration: underline; font-weight: bold;">初期設定</a>が必要です　※エビデンス添付は<a href="#" onclick="event.preventDefault(); document.getElementById('pdfFileInput').click();" style="color: #1976d2; text-decoration: underline; font-weight: bold;">PDFを選択</a>して操作してください）</span></h3>
                 <div id="applyNextHint" style="display: none; text-align: left; margin-bottom: 6px;">
                     <span class="pyokopyoko" style="display: inline-block; background: #ff5252; color: white; padding: 6px 14px; border-radius: 8px; font-size: 13px; font-weight: bold; box-shadow: 0 4px 12px rgba(0,0,0,0.3); position: relative; margin-left: 10px;">
                         👇 ココをクリックして、B列に貼り付け
@@ -1271,8 +1251,8 @@
                     <button type="button" class="btn btn-apply-status" onclick="openRegisteredUrl('url3')" data-bounce="iconApply">③✅ 承認状況確認</button>
                 </div>
                 <div style="color: #666; font-size: 13px; margin-top: 10px;">
-                    ※各初回のみ初期設定が必要です。<a href="#" onclick="event.preventDefault(); openUrlEditor();" data-bounce="iconApply" style="color: #1976d2; text-decoration: underline; font-weight: bold;">初期設定</a>から申請者情報と各URLを登録してください。（URLは<a href="#" onclick="event.preventDefault(); openFreeeRightWindow();" data-bounce="iconApply" style="color: #1976d2; text-decoration: underline; font-weight: bold;">freee人事労務</a>→従業員情報ページ→通勤交通費 から取得）<br>
-                    ※初期設定を行うと、<span style="color: #dc3545; font-weight: bold;">②申請用フォーム欄の入力も自動で行われます。</span>ボタンを押したら「続行」をクリックしてください。<br>
+                    ※各初回のみ<a href="#" onclick="event.preventDefault(); openUrlEditor();" data-bounce="iconApply" style="color: #1976d2; text-decoration: underline; font-weight: bold;">初期設定</a>が必要です。申請者情報と各URLを登録してください。（各URLは<a href="#" onclick="event.preventDefault(); openFreeeRightWindow();" data-bounce="iconApply" style="color: #1976d2; text-decoration: underline; font-weight: bold;">freee人事労務</a>→従業員情報ページ→通勤交通費 から取得できます）<br>
+                    ※初期設定を行うと、<span style="color: #dc3545; font-weight: bold;">②申請用フォーム欄の入力も自動で行われます。</span>ボタンを押したら「続行」をクリックして自動入力された内容に不備がないか確認してください。<br>
                     ※登録情報は現在お使いのブラウザ内にのみ保存されます。PCやブラウザを変更した場合は、再度登録が必要になります。
                 </div>
             </div>
@@ -1443,6 +1423,14 @@
             window.open(url, '_blank');
         }
 
+        // 方法A(PDFから読み込み)を開いてスクロールする
+        function openMethodAAndScroll() {
+            const m = document.getElementById('methodA');
+            if (m) {
+                m.open = true;
+                m.scrollIntoView({behavior: 'smooth', block: 'start'});
+            }
+        }
         // freee人事労務を右側70%幅の別ウィンドウで開く
         function openFreeeRightWindow() {
             const sw = screen.availWidth;
@@ -1510,20 +1498,19 @@
                 url2: document.getElementById('urlInput2').value.trim(),
                 url3: document.getElementById('urlInput3').value.trim()
             };
+            // 空欄なら既存値を維持する（誤って空のまま保存ボタンを押した場合に過去のデータを失わないように）
             for (const key in inputs) {
                 if (inputs[key]) {
                     localStorage.setItem(URL_STORAGE_KEYS[key], inputs[key]);
-                } else {
-                    localStorage.removeItem(URL_STORAGE_KEYS[key]);
                 }
             }
-            // 従業員情報も保存
+            // 従業員情報も保存（空欄なら維持）
             const empId = document.getElementById('empIdInput').value.trim();
             const empName = document.getElementById('empNameInput').value.trim();
             const empEmail = document.getElementById('empEmailInput').value.trim();
-            if (empId) localStorage.setItem(EMP_ID_KEY, empId); else localStorage.removeItem(EMP_ID_KEY);
-            if (empName) localStorage.setItem(EMP_NAME_KEY, empName); else localStorage.removeItem(EMP_NAME_KEY);
-            if (empEmail) localStorage.setItem(EMP_EMAIL_KEY, empEmail); else localStorage.removeItem(EMP_EMAIL_KEY);
+            if (empId) localStorage.setItem(EMP_ID_KEY, empId);
+            if (empName) localStorage.setItem(EMP_NAME_KEY, empName);
+            if (empEmail) localStorage.setItem(EMP_EMAIL_KEY, empEmail);
             showSuccess('初期設定を保存しました');
             // ?settings=1モード(別ウィンドウ)時は1.2秒後にウィンドウを閉じる、それ以外はモーダルだけ閉じる
             if (new URLSearchParams(location.search).has('settings')) {
@@ -4168,5 +4155,36 @@ async function handlePdfUpload(event) {
         }
     </script>
 
+
+    <div id="userGuideModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; justify-content: center; align-items: center; padding: 20px;" onclick="if(event.target===this)toggleUserGuide();">
+                        <div style="background: white; border-radius: 12px; padding: 16px 20px; width: 560px; max-width: 92%; max-height: 85vh; overflow-y: auto; position: relative; box-sizing: border-box; font-size: 13px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                                <h3 style="margin: 0; color: #ff6b6b; font-size: 14px;">📋 表をコピーして貼り付け（方法B）の詳しい使い方</h3>
+                                <button type="button" onclick="toggleUserGuide()" style="background: none; border: none; font-size: 22px; cursor: pointer; color: #666; padding: 0 6px; line-height: 1;">×</button>
+                            </div>
+                            <div class="user-guide-content">
+                                <h4>入力内容は自動で保存されます</h4>
+                                <p>貼り付けた履歴はブラウザに自動保存されるので、ページを閉じても次回開いた時に残っています。<br>
+                                <small>※同じPCの同じブラウザに限ります。別のPCに変えたり、ブラウザ履歴を全削除すると消えます。</small></p>
+
+                                <h4>別日の履歴を追加するには</h4>
+                                <p>PASMOから新しい履歴をコピーした後、<strong style="color:#64b5f6;">入力欄の一番上の空行</strong>にカーソルを置いて Ctrl+V で貼り付けてください。古い履歴は下に押し下げられます。</p>
+
+                                <h4>入力欄が自動で整理されます</h4>
+                                <p>解析ボタンを押すと、入力欄の中身が <strong style="color:#ff9800;">日付の新しい順</strong> に自動で並び替わって、<strong>「↓ここから下は解析済み↓」</strong> という区切り線の下にまとめられます。<br>
+                                次に新しい履歴を追加する時は、上の空行に貼り付ければOKです。</p>
+
+                                <h4>同じ履歴は二重に登録されません</h4>
+                                <p>うっかり同じ履歴を2回貼り付けても大丈夫です。<strong>日付・乗車駅・降車駅・金額</strong>が全て同じものは「同じトリップ」と判定して自動でスキップします。<br>
+                                過去の履歴と新しい履歴に重複があっても、新規分だけが追加されます。</p>
+
+                                <h4>「NEW」バッジについて</h4>
+                                <p>プレビュー表で <span class="new-badge">NEW</span> バッジ と <span style="background:#f0fdf4; padding:1px 6px; border:1px solid #ddd; border-radius:3px;">薄い緑背景</span> が付いている行は、最後の解析で新しく追加された分です。次の解析まで残るので、ゆっくり種別変更やチェック確認ができます。</p>
+
+                                <h4>リセットボタンの動作</h4>
+                                <p>🗑️ リセットを押すと、<strong>入力欄・プレビュー・累計データ全て</strong>が消去されます。一発で消えるので、間違って押さないよう注意してください。</p>
+                            </div>
+                        </div>
+                    </div>
 </body>
 </html>
