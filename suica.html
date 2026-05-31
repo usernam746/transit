@@ -1033,31 +1033,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=Hachi+Maru+Pop&display=swap" rel="stylesheet">
-
-<script>
-/* ===== ツールアクセスログ送信 (2026-05-15追加) ===== */
-/* このスクリプトはツール本体の動作に一切影響しません */
-(function(){
-  try{
-    var GAS_URL='https://script.google.com/macros/s/AKfycbzlYmFxsRfYxR_4TSQjQlej-L5UGUm4fVp2JmZIpTcUgIijbhhDl_8ymDWyIc_C3UhfhQ/exec';
-    var TOOL_NAME='suica';
-    var deviceId='';
-    try{
-      deviceId=localStorage.getItem('toolAccessDeviceId');
-      if(!deviceId){
-        deviceId='dev_'+Date.now()+'_'+Math.random().toString(36).substr(2,9);
-        localStorage.setItem('toolAccessDeviceId',deviceId);
-      }
-    }catch(e){deviceId='no_ls_'+Date.now();}
-    if(typeof fetch!=='undefined'){
-      fetch(GAS_URL,{
-        method:'POST',
-        body:JSON.stringify({tool:TOOL_NAME,device_id:deviceId,user_agent:navigator.userAgent,referrer:document.referrer||''})
-      }).catch(function(){});
-    }
-  }catch(e){}
-})();
-</script>
 </head>
 <body>
     <div id="titleStyleToast" style="display: none;"></div>
@@ -1151,7 +1126,7 @@
             </div>
 
             <!-- 公式ツール注記（履歴貼り付けセクションの真下、外側） -->
-            <!-- version [s118] -->
+            <!-- version [s119] -->
             <div id="officialNotice" style="text-align: center; padding: 10px 12px; font-size: 12px; color: #666; line-height: 1.6;">
                 ※本ツールはJR東日本協議会の公式ツールではありません。SuicaはJR東日本協議会の登録商標です。
             </div>
@@ -2080,12 +2055,12 @@
                 return;
             }
             
-            // 【重要】最終的に必ず日付の新しい順にソート（クリップボード順序の保証）
-            // processedDataは既にソート済みだが、保険として再ソート
+            // 【重要】最終的に必ず日付の古い順にソート（クリップボード順序の保証）
+            // processedDataは新しい順にソート済みだが、申請用フォーマット出力は古い順にする
             selectedData.sort((a, b) => {
                 const ad = a.date || '0000-00-00';
                 const bd = b.date || '0000-00-00';
-                return bd.localeCompare(ad);
+                return ad.localeCompare(bd);
             });
             
             // スプレッドシート用のタブ区切り形式で出力（ヘッダー行なし）
@@ -2100,7 +2075,7 @@
             document.getElementById('outputArea').value = output;
             document.getElementById('outputSection').classList.remove('hidden');
             document.getElementById('pasteSection').classList.remove('hidden');
-            showSuccess(`${selectedData.length}件のデータを申請フォーマットで生成しました（日付の新しい順）`);
+            showSuccess(`${selectedData.length}件のデータを申請フォーマットで生成しました（日付の古い順）`);
             
             // 出力セクションまでスムーススクロール → 完了後にコピーボタン誘導アニメ発動
             setTimeout(() => {
