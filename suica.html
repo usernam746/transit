@@ -1126,7 +1126,7 @@
             </div>
 
             <!-- 公式ツール注記（履歴貼り付けセクションの真下、外側） -->
-            <!-- version [s119] -->
+            <!-- version [s121] -->
             <div id="officialNotice" style="text-align: center; padding: 10px 12px; font-size: 12px; color: #666; line-height: 1.6;">
                 ※本ツールはJR東日本協議会の公式ツールではありません。SuicaはJR東日本協議会の登録商標です。
             </div>
@@ -2055,8 +2055,12 @@
                 return;
             }
             
-            // 【重要】最終的に必ず日付の古い順にソート（クリップボード順序の保証）
-            // processedDataは新しい順にソート済みだが、申請用フォーマット出力は古い順にする
+            // 【重要】申請用フォーマット出力の並び順を組み立てる
+            // 元データは「新しい取引が上（モバイル仕様）」で並んでいるため、
+            // 1) 一旦逆順にすると、同一日付内が「朝→夜」の順序になる
+            // 2) その状態で日付昇順にソート（安定ソートで同一日付内の順序は維持）
+            //    → 日付単位: 古い→新しい／同一日付内: 朝→夜
+            selectedData.reverse();
             selectedData.sort((a, b) => {
                 const ad = a.date || '0000-00-00';
                 const bd = b.date || '0000-00-00';
@@ -3844,6 +3848,12 @@ async function handlePdfUpload(event) {
             return;
         }
         
+        // PDFの元データは「朝→夜（古い→新しい）」で並んでいるが、
+        // コピペ入力（モバイルサイトの表）は「夜→朝（新しい→古い）」で並んでいる。
+        // 後段の共通処理（selectedData.reverse()）はコピペ基準のため、
+        // PDF側を反転させてコピペと同じ並び順にそろえてからtextareaへ入れる。
+        filteredLines.reverse();
+
         // 既存の履歴をクリアして、PDFから読み込んだ履歴を入れる
         const textarea = document.getElementById('suicaData');
         textarea.value = filteredLines.join('\n');
